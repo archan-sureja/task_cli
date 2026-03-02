@@ -5,8 +5,8 @@ from storage import JSONFileStorage
 
 def format_list(lst):
     str = ""
-    for id,des in lst:
-        str += f"{id} | {des}\n"
+    for id,des,status in lst:
+        str += f"{id} | {des} | {status}\n"
     return str
 
 def main():
@@ -34,7 +34,6 @@ def main():
             else:
                 return "Invalid Format : use task-cli add <description>"
         case "delete":
-           
             if len(cli_args)==2:
                 del_id = cli_args[1]
                 if storage.delete(del_id):
@@ -57,12 +56,12 @@ def main():
                 return "Invalid Format : use task-cli update <ID> <description>"
         case "list":
             if len(cli_args)==1:
-                return format_list(list(map(lambda x : (x.id,x.description),storage.list())))
+                return format_list(list(map(lambda x : (x["id"],x["description"],x["status"]),storage.list())))
             elif len(cli_args)==2:
                 status = cli_args[1]
                 if status not in ["todo","in-progress","done"]:
                     return "Invalid status to filter tasks"
-                return format_list(list(map(lambda x : (x.id,x.description),storage.list(status=status))))
+                return format_list(list(map(lambda x : (x["id"],x["description"],x["status"]),storage.list(status=status))))
             else:
                 return "Invalid Format : use task-cli list <status>"
 

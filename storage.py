@@ -31,7 +31,7 @@ class JSONFileStorage(GenericStorage):
          with open(self.path,"r+") as f:
               res = json.load(f)
               obj_list = res["obj_list"]
-              obj_list.append(obj)
+              obj_list.append(obj.__dict__)
               res = {"obj_list":obj_list}
               f.seek(0)
               json.dump(res,f)
@@ -56,6 +56,9 @@ class JSONFileStorage(GenericStorage):
              for idx,obj in enumerate(obj_list):
                  if obj["id"] == id:
                      obj_list.pop(idx)
+                     res = {"obj_list":obj_list}
+                     f.seek(0)
+                     json.dump(res,f)
                      return True 
              return False 
 
